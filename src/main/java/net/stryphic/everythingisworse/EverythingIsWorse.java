@@ -1,6 +1,8 @@
 package net.stryphic.everythingisworse;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -13,6 +15,10 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import net.stryphic.everythingisworse.misc.EverythingIsWorseTab;
 import org.slf4j.Logger;
 
 import java.util.stream.Collectors;
@@ -23,6 +29,14 @@ import java.util.stream.Collectors;
 public class EverythingIsWorse
 {
     public static String MOD_ID = "everythingisworse";
+
+
+    //Item registerator
+    public static final DeferredRegister<Item> ITEMS =
+            DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
+
+    //Item definitions
+    public static final RegistryObject<Item> POOP_ITEM = ITEMS.register("poop", () -> new Item(new Item.Properties().tab(EverythingIsWorseTab.instance)));
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -37,6 +51,8 @@ public class EverythingIsWorse
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+
+        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     private void setup(final FMLCommonSetupEvent event)
